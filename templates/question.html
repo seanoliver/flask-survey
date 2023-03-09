@@ -4,17 +4,19 @@
   <h1>{{ question.prompt }}</h1>
 
   <form action="/answer" method="POST">
-
+    {% for response in question.choices %}
       <!-- you should have one item like this for every choice -->
       <p>
+        <!-- Us: loop here to display choices -->
+
         <input
             type="radio"
             name="answer"
-            value="value-goes-here">
-        choice-goes-here
-        <!-- Us: loop here to display choices -->
+            id="{{ response }}"
+            value="{{ response }}">
+        <label for="{{ response }}">{{ response }}</label>
       </p>
-
+      {% endfor %}
       <!-- Us: Add hidden input with the current question index -->
     <button>Continue</button>
   </form>

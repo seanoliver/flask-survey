@@ -27,10 +27,17 @@ def root_route():
 @app.post("/begin")
 def begin_survey_route():
     q_number = len(responses)
-    return redirect(f"/quesions/{q_number}")
+    return redirect(f"/questions/{q_number}")
 
 # GET request for updated /questions/0 page
 #   render the question.html jinja template
+@app.get("/questions/<int:q_number>")
+def survey_question(q_number):
+
+    return render_template(
+        "question.html",
+        question=survey.questions[q_number]
+    )
 
 # POST route for /answer
 #   record answer in responses
@@ -40,3 +47,5 @@ def begin_survey_route():
 
 
 # request.form["comment"]
+
+# debugger pin: 114-386-609
