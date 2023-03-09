@@ -14,10 +14,21 @@ responses = []
 # renders title, instructions, button start survey
 #   Button action will eventually take user to /questions/0 (rn form action
 #   takes user to /begin)
+@app.get("/")
+def root_route():
+    return render_template(
+        "survey_start.html",
+        title=survey.title,
+        instructions=survey.instructions)
 
 # POST reroute survey_start form from /begin to /questions/0
 #   /questions/<q_number>
 #   either hardcode on length of responses, or future cookies?
+@app.post("/begin")
+def begin_survey_route():
+    q_number = len(responses)
+    return redirect(f"/quesions/{q_number}")
+
 # GET request for updated /questions/0 page
 #   render the question.html jinja template
 
