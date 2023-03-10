@@ -16,6 +16,10 @@ responses = []
 #   takes user to /begin)
 @app.get("/")
 def root_route():
+    """ Render the start page for the survey, passing in
+        title and instructions from global survey object.
+    """
+
     return render_template(
         "survey_start.html",
         title=survey.title,
@@ -26,6 +30,14 @@ def root_route():
 #   either hardcode on length of responses, or future cookies?
 @app.post("/begin")
 def begin_survey_route():
+    """ POST route for starting survey or redirecting
+        user to last completed question in survey.
+
+        Send the user to the question that corresponds with
+        the length of the responses list.
+    """
+
+
     q_number = len(responses)
     return redirect(f"/questions/{q_number}")
 
@@ -33,6 +45,8 @@ def begin_survey_route():
 #   render the question.html jinja template
 @app.get("/questions/<int:q_number>")
 def survey_question(q_number):
+    """ Render a single survey question on a page.
+    """
 
     return render_template(
         "question.html",
@@ -47,6 +61,13 @@ def survey_question(q_number):
 #   return redirect("/questions/<q_number>")
 @app.post("/answer")
 def answer_route():
+    """ POST route that:
+        - Records the answer given to an individual question
+        - Increments the question number by 1
+        - Checks if question number < num of survey questions
+            - If yes, redirect to next survey question
+            - If no, redirect to thank you page
+    """
 
     global responses
     responses.append(request.form["answer"])
@@ -63,6 +84,11 @@ def answer_route():
 
 @app.get("/completion")
 def thank_you():
+    """ Render thank you confirmation page to confirm survey has been
+        successfully received.
+
+        Show a list of survey questions and user's responses.
+    """
 
     recap = zip(survey.questions, responses)
 
