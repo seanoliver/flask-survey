@@ -36,7 +36,8 @@ def survey_question(q_number):
 
     return render_template(
         "question.html",
-        question=survey.questions[q_number]
+        question=survey.questions[q_number],
+        q_number=q_number
     )
 
 # POST route for /answer
@@ -44,6 +45,19 @@ def survey_question(q_number):
 #   take user to next question by input of question
 #   return parameter of q_number of next question
 #   return redirect("/questions/<q_number>")
+@app.post("/answer")
+def answer_route():
+
+    global responses
+    responses.append(request.form["answer"])
+
+    q_number = int(request.form["index"])
+    q_number += 1
+
+    if q_number < len(survey.questions):
+        # route to next quesiton
+        return redirect(f"/questions/{q_number}")
+
 
 
 # request.form["comment"]
