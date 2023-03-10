@@ -25,7 +25,7 @@ def begin_survey_route():
 
         Clears any existing responses and starts survey at question 0.
     """
-    session["responses"] = []
+    session["responses"] = [] # Make sure its here in post route b/c caching
     return redirect("/questions/0")
 
 
@@ -35,8 +35,10 @@ def survey_question(q_number):
     """
     responses_length = len(session["responses"])
     if responses_length == len(survey.questions):
+        flash("Invalid question")
         return redirect(f"/completion")
     elif responses_length != q_number:
+        flash("Invalid question")
         return redirect(f"/questions/{responses_length}")
     else:
         return render_template(
