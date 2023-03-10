@@ -8,8 +8,6 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
-responses = []
-
 @app.get("/")
 def root_route():
     """ Render the start page for the survey, passing in
@@ -27,8 +25,7 @@ def begin_survey_route():
 
         Clears any existing responses and starts survey at question 0.
     """
-
-    responses.clear()
+    session["responses"] = []
     return redirect("/questions/0")
 
 
@@ -50,8 +47,9 @@ def answer_route():
             - If yes, redirect to next survey question
             - If no, redirect to thank you page
     """
-
+    responses = session["responses"]
     responses.append(request.form["answer"])
+    session["responses"] = responses
     q_number = len(responses)
 
     if q_number < len(survey.questions):
@@ -68,7 +66,7 @@ def thank_you():
         Show a list of survey questions and user's responses.
     """
 
-    recap = zip(survey.questions, responses)
+    recap = zip(survey.questions, session["responses"])
 
     return render_template(
         "completion.html",
