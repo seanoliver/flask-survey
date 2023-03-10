@@ -57,6 +57,19 @@ def answer_route():
     if q_number < len(survey.questions):
         # route to next quesiton
         return redirect(f"/questions/{q_number}")
+    else:
+        # redirect to thank you page
+        return redirect("/completion")
+
+@app.get("/completion")
+def thank_you():
+
+    recap = zip(survey.questions, responses)
+
+    return render_template(
+        "completion.html",
+        recap=recap
+    )
 
 
 
