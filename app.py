@@ -33,10 +33,15 @@ def begin_survey_route():
 def survey_question(q_number):
     """ Render a single survey question on a page.
     """
-
-    return render_template(
-        "question.html",
-        question=survey.questions[q_number]
+    responses_length = len(session["responses"])
+    if responses_length == len(survey.questions):
+        return redirect(f"/completion")
+    elif responses_length != q_number:
+        return redirect(f"/questions/{responses_length}")
+    else:
+        return render_template(
+            "question.html",
+            question=survey.questions[q_number]
     )
 
 @app.post("/answer")
